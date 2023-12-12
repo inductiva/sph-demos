@@ -1,50 +1,10 @@
 """Visualization utils to create movie from VTK files."""
 import os
-import pathlib
 import tempfile
 from typing import List, Optional
 
 import pyvista as pv
 import moviepy.video.io.ImageSequenceClip as moviepy_io
-
-
-def get_sorted_files(data_dir: str,
-                     file_format: str = "name",
-                     split_token: str = "_"):
-    """Returns list of files sorted according to [file_key].
-
-    Order a set of .format files of the form
-    ['name_1.format', 'name_2.format',...,'name_10.format',
-    ...,'name_n.format'].
-
-    The default sorting methods for list, list.sort()
-    or sorted(list), order 'name_10.format' before 'name_2.format',
-    which is not representative of the time series.
-
-    In this function we sort according to the number..
-    """
-
-    if not os.path.exists(data_dir):
-        raise IOError(f"Directory '{data_dir}' does not exist.")
-
-    # Get a list of the files in the data directory.
-    files = os.scandir(data_dir)
-
-    # The files have file_format extension.
-    files = [
-        file for file in files if pathlib.Path(file.path).suffix == file_format
-    ]
-
-    # Sort the files to be read according to [file_key].
-    def get_alphanum_key(file):
-        file_name = pathlib.Path(file.path).stem
-        file_name_splits = file_name.split(split_token)
-        file_key = file_name_splits[-1]
-        return int(file_key)
-
-    files = sorted(files, key=get_alphanum_key)
-
-    return files
 
 
 def create_movie_from_vtk(vtk_output_dir: str,
@@ -92,30 +52,36 @@ def create_movie_from_vtk(vtk_output_dir: str,
     if virtual_display:
         pv.start_xvfb()
 
-    pv.global_theme.background = "white"
-    vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
+    vtk_files = os.listdir(vtk_output_dir)
     frames = []
 
     plt = pv.Plotter(off_screen=True)
     plt.camera_position = camera
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        for index, frame_file in enumerate(vtk_files):
-            if index % int(round(60 / fps)) == 0:
-                frame_path = os.path.join(vtk_output_dir, frame_file)
-                image_frame_path = os.path.join(
-                    tmp_dir, "frame_" + str(index).zfill(5) + ".png")
-                mesh = pv.read(frame_path)
-                plt.add_mesh(mesh,
-                             name="fluid_block_snapshot",
-                             scalars=scalars,
-                             clim=scalar_limits,
-                             render_points_as_spheres=True,
-                             color=color,
-                             cmap=cmap)
-                plt.screenshot(image_frame_path, return_img=False)
-                frames.append(image_frame_path)
+        for frame_file in vtk_files:
+            frame_path = os.path.join(vtk_output_dir, frame_file)
+
+            # frame_file = "ParticleData_Fluid_13.vtk" -> frame_index = 13
+            frame_index = frame_file.split("_")[-1].split(".")[0]
+            image_frame_path = os.path.join(
+                tmp_dir, "frame_" + str(frame_index).zfill(5) + ".png")
+
+            # Read mesh and create a snapshot with Pyvista
+            mesh = pv.read(frame_path)
+            plt.add_mesh(mesh,
+                         name="fluid_block_snapshot",
+                         scalars=scalars,
+                         clim=scalar_limits,
+                         render_points_as_spheres=True,
+                         color=color,
+                         cmap=cmap)
+            plt.screenshot(image_frame_path, return_img=False)
+            frames.append(image_frame_path)
+
         plt.close()
 
+        # Sort frames and render the movie
+        frames = sorted(frames)
         clip = moviepy_io.ImageSequenceClip(frames, fps=fps)
         clip.write_videofile(movie_path)

@@ -1,15 +1,15 @@
 # Scenarios
 
-**Inductiva API** provides a framework for users to create personalized scenarios. Scenarios describe a physical model of a process in nature, that can be simulated. With a scenario, the complexity of configuring the simulators is abstracted and allows users to configure only a few parameters to make an exploration of the physical model.
+**Inductiva API** provides a framework for users to create personalized scenarios. Scenarios describe a physical model of a process in nature, that can be simulated. With a scenario, the complexity of configuring the underlying simulators is abstracted away and this allows users to configure only a few parameters to make an exploration of the physical model.
 
 As a **user**, you will have the ability to create your own scenarios. A few fundamental blocks are required to create a scenario:
-- Choose the simulators you want to use;
+- Choose the simulators you want to use among the ones available via the Inductiva API;
 - Template the input files for the simulators;
-- Construct the Python code based on Inductiva API.
+- Construct a Python class based on Inductiva API .
 
-In this repository, we present two examples of scenarios that simulate the motion of fluid in a cubic tank: the `DamBreak` and the `FluidBlock` scenarios.
+In this repository, we present two examples of scenarios that simulate the motion of fluid in a cubic tank using SPH: the `DamBreak` and the `FluidBlock` scenarios.
 
-The scenarios are meant to **inspire** the creation of personalized scenarios.
+The scenarios contained in this demo are meant to **inspire** the creation of personalized scenarios.
 Together, with the scenarios we also show how the outputs can be handled by post-processing methods and visualize the results.
 
 To learn more on how to create your scenarios, check the [documentation](https://github.com/inductiva/inductiva/wiki/Build-your-own-scenario).

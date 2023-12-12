@@ -2,7 +2,7 @@
 
 [**Inductiva API**](https://github.com/inductiva/inductiva/tree/main) empowers users to run large-scale simulations. With a simple interface, users have access to several simulators and features that help manage complex simulation workflows. 
 
-Here, we explore Smoothed Particle Hydrodynamics (SPH) with two simulators available via **Inductiva API** - [SPlisHSPlasH](https://splishsplash.physics-simulation.org/) and [DualSPHysics](https://dual.sphysics.org/). 
+Here, we explore Smoothed Particle Hydrodynamics (SPH) with two simulators available via **Inductiva API** - [SplishSplash](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH) and [DualSPHysics](https://github.com/inductiva/inductiva/wiki/DualSPHysics). 
 
 In this repository, we make a tour of **Inductiva API**:
 - [Create a scenario](scenario/README.md);

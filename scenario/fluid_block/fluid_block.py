@@ -4,7 +4,7 @@ import os
 from typing import List, Optional
 import shutil
 
-from inductiva import tasks, resources, scenarios, simulators
+import inductiva
 
 SCENARIO_TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "..",
                                      "templates", "fluid_block")
@@ -14,7 +14,7 @@ DUALSPHYSICS_TEMPLATE_INPUT_DIR = "dualsphysics"
 DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
-class FluidBlock(scenarios.Scenario):
+class FluidBlock(inductiva.scenarios.Scenario):
     """Fluid block scenario.
 
     This is a simulation scenario for a fluid block moving in a cubic tank under
@@ -38,7 +38,9 @@ class FluidBlock(scenarios.Scenario):
     The scenario can be simulated with SPlisHSPlasH and DualSPHysics.
     """
 
-    valid_simulators = [simulators.SplishSplash, simulators.DualSPHysics]
+    valid_simulators = [
+        inductiva.simulators.SplishSplash, inductiva.simulators.DualSPHysics
+    ]
 
     def __init__(self,
                  density: float,
@@ -60,6 +62,8 @@ class FluidBlock(scenarios.Scenario):
               z), in m/s.
         """
 
+        # The simulations performed with the current templates for both simulators
+        # only support this range of density for physical relevance.
         if not 400 <= density <= 2000:
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
@@ -80,8 +84,9 @@ class FluidBlock(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.SplishSplash(),
-        machine_group: Optional[resources.MachineGroup] = None,
+        simulator: inductiva.simulators.Simulator = inductiva.simulators.
+        SplishSplash(),
+        machine_group: Optional[inductiva.resources.MachineGroup] = None,
         storage_dir: Optional[str] = "",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
@@ -89,7 +94,7 @@ class FluidBlock(scenarios.Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_export_rate: float = 60,
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -129,24 +134,26 @@ class FluidBlock(scenarios.Scenario):
         return task
 
     @singledispatchmethod
-    def set_template_dir(self, simulator: simulators.Simulator):
+    def set_template_dir(self, simulator: inductiva.simulators.Simulator):
         pass
 
     @singledispatchmethod
-    def get_config_filename(self, simulator: simulators.Simulator):
+    def get_config_filename(self, simulator: inductiva.simulators.Simulator):
         pass
 
     @singledispatchmethod
-    def config_params(self, simulator: simulators.Simulator, input_dir):
+    def config_params(self, simulator: inductiva.simulators.Simulator,
+                      input_dir):
         pass
 
     @singledispatchmethod
-    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):
+    def add_extra_input_files(self, simulator: inductiva.simulators.Simulator,
+                              input_dir):
         pass
 
 
 @FluidBlock.set_template_dir.register
-def _(self, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.simulators.SplishSplash):  # pylint: disable=unused-argument
     """Set the template directory for DualSPHysics."""
 
     self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -154,13 +161,13 @@ def _(self, simulator: simulators.SplishSplash):  # pylint: disable=unused-argum
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
+def _(cls, simulator: inductiva.simulators.SplishSplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidBlock.config_params.register
-def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     # Generate the simulation configuration file.
@@ -179,7 +186,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
 
 
 @FluidBlock.add_extra_input_files.register
-def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Add unit box mesh file to input directory."""
 
     unit_box_file_path = os.path.join(self.template_files_dir, "unit_box.obj")
@@ -187,7 +194,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
 
 
 @FluidBlock.set_template_dir.register
-def _(self, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Set the template directory for DualSPHysics."""
 
     self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -195,13 +202,13 @@ def _(self, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argum
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
+def _(cls, simulator: inductiva.simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
     return None
 
 
 @FluidBlock.config_params.register
-def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
     self.params["particle_distance"] = 2 * self.params["particle_radius"]
