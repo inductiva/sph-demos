@@ -2,7 +2,6 @@
 from functools import singledispatchmethod
 import os
 from typing import List, Optional
-import shutil
 
 import inductiva
 
@@ -146,11 +145,6 @@ class FluidBlock(inductiva.scenarios.Scenario):
                       input_dir):
         pass
 
-    @singledispatchmethod
-    def add_extra_input_files(self, simulator: inductiva.simulators.Simulator,
-                              input_dir):
-        pass
-
 
 @FluidBlock.set_template_dir.register
 def _(self, simulator: inductiva.simulators.SplishSplash):  # pylint: disable=unused-argument
@@ -183,14 +177,6 @@ def _(self, simulator: inductiva.simulators.SplishSplash, input_dir):  # pylint:
             for dimension in self.params["fluid_dimensions"]
         ]
     })
-
-
-@FluidBlock.add_extra_input_files.register
-def _(self, simulator: inductiva.simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
-    """Add unit box mesh file to input directory."""
-
-    unit_box_file_path = os.path.join(self.template_files_dir, "unit_box.obj")
-    shutil.copy(unit_box_file_path, input_dir)
 
 
 @FluidBlock.set_template_dir.register
