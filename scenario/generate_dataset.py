@@ -43,7 +43,7 @@ for i in range(N_SIMULATIONS):
     velocity = np.random.uniform(low=-1., high=1., size=(3,))
     viscosity = 10**np.random.uniform(low=-6., high=1.)
 
-    print(f"\n========== LAUNCHING SIMULATION {i+1}/{N_SIMULATIONS} ==========")
+    print(f"\n========== LAUNCHING SIMULATION {i}/{N_SIMULATIONS} ==========")
     scenario = fluid_block.FluidBlock(density=DENSITY,
                                       kinematic_viscosity=viscosity,
                                       dimensions=dimensions,
@@ -59,7 +59,7 @@ for i in range(N_SIMULATIONS):
 
 # Wait for simulation to finish and download results
 for index, task in enumerate(dataset_tasks):
-    print(f"\n========== WAITING FOR SIMULATION {index+1} TO FINISH ==========")
+    print(f"\n========== WAITING FOR SIMULATION {index} TO FINISH ==========")
     task.wait()
     sim_name = "sim_" + str(index).zfill(4)
     output_directory = os.path.join(OUTPUT_DIR, sim_name)
@@ -67,6 +67,6 @@ for index, task in enumerate(dataset_tasks):
         output_dir = task.download_outputs(output_dir=output_directory)
         post_processing.SPHSimulationOutput(output_dir).render()
     else:
-        print(f"Simulation {i} failed with {task.get_status()}.")
+        print(f"Simulation {index} failed with {task.get_status()}.")
 
 dataset_machines.terminate()
