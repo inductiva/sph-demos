@@ -37,11 +37,11 @@ To template a file you will need to substitute the values that were for the simu
 <div style="display: flex; justify-content: space-between;">
 <div>
     <h7>Input File</h7>
-    <img src="assets/file_example.png" alt="File Example">
+    <img src="/assets/file_example.png" alt="File Example">
 </div>
 <div>
     <h7>Template file</h7>
-    <img src="assets/template_file_example.png" alt="Template Example">
+    <img src="/assets/template_file_example.png" alt="Template Example">
 </div>
 </div>
 
@@ -143,7 +143,7 @@ simulation_output.render(fps=60)
 ```
 
 <p align="center">
-  <img src="assets/dam_break.gif" alt="Centered Image" width="400" height="300">
+  <img src="/assets/dam_break.gif" alt="Centered Image" width="400" height="300">
 
 
 ### Fluid Block
@@ -194,4 +194,4 @@ simulation_output.render()
 ```
 
 <p align="center">
-  <img src="assets/fluid_block.gif" alt="Centered Image" width="400" height="300">
+  <img src="/assets/fluid_block.gif" alt="Centered Image" width="400" height="300">

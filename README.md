@@ -5,9 +5,9 @@
 Here, we explore Smoothed Particle Hydrodynamics (SPH) with two simulators available via **Inductiva API** - [SplishSplash](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH) and [DualSPHysics](https://github.com/inductiva/inductiva/wiki/DualSPHysics). 
 
 In this repository, we make a tour of **Inductiva API**:
-- [Run a simulation](README.md#running-a-simulation);
-- [Create a scenario](scenario/README.md);
-- [Generate a dataset via scenario](dataset/README.md).
+- [Running a simulation](README.md#running-a-simulation);
+- [Create a custom simulation scenario](scenario/README.md);
+- [Generate a synthetic dataset at scale](dataset/README.md).
 
 ### Running a Simulation
 
@@ -34,6 +34,11 @@ task = splishsplash.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 ```
+
+As soon you launch the simulation with this script, you will receive the following logs telling how the simulation is going:
+
+<img src="assets/simulation_logs.png" alt="Simulation Logs">
+
 
 ##### DualSPHysics
 
