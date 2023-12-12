@@ -62,8 +62,8 @@ class FluidBlock(inductiva.scenarios.Scenario):
               z), in m/s.
         """
 
-        # The simulations performed with the current templates for both simulators
-        # only support this range of density for physical relevance.
+        # The simulations performed with the current templates for both
+        # simulators only support this range of density for physical relevance.
         if not 400 <= density <= 2000:
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
