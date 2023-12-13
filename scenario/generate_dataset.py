@@ -14,7 +14,6 @@ import numpy as np
 
 import inductiva
 import fluid_block
-import post_processing
 
 # Constant parameters for all simulations
 DENSITY = 1e3  # in kg/m^3
@@ -22,13 +21,13 @@ TANK_DIMENSIONS = [1., 1., 1.]  # in meters
 SIMULATION_TIME = 3.  # in seconds
 PARTICLE_RADIUS = 0.008  # in meters
 OUTPUT_DIR = "dataset"
-N_SIMULATIONS = 10
+N_SIMULATIONS = 100
 
 # Generate dataset with FluidBlock scenario
 dataset_tasks = []
 
 dataset_machines = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-8", num_machines=10, spot=True)
+    machine_type="c2-standard-4", num_machines=10, spot=True)
 dataset_machines.start()
 
 for i in range(N_SIMULATIONS):
@@ -65,7 +64,6 @@ for index, task in enumerate(dataset_tasks):
     output_directory = os.path.join(OUTPUT_DIR, sim_name)
     if task.get_status() == "success":
         output_dir = task.download_outputs(output_dir=output_directory)
-        post_processing.SPHSimulationOutput(output_dir).render()
     else:
         print(f"Simulation {index} failed with {task.get_status()}.")
 
