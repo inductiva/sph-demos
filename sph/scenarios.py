@@ -85,7 +85,8 @@ class FluidBlockDualSPHysics(inductiva.mixins.FileManager):
             "prompts": []
         }, {
             "cmd":
-                "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
+                "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid"
+                 " -onlytype:-all,+fluid",
             "prompts": []
         }]
 

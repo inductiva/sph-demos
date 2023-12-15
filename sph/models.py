@@ -1,6 +1,5 @@
 """Fluid Block Model"""
 from dataclasses import dataclass, asdict
-from typing import Optional, List
 import enum
 
 import numpy as np

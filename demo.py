@@ -1,5 +1,35 @@
-from lib import models
-from lib import scenarios, post_processing
+"""
+Dam break scenario.
+
+Simulates the dynamics of a static fluid block placed at the bottom corner
+of a cube, subject to gravity forces, mimicking the collapse of the walls
+of a dam.  
+
+# side view:
+                    (1,1)
+        ┌─────────────┐
+        │             │
+        │             │
+        │             │   z
+        │▄▄▄▄▄        │   │
+        │█████        │   └───x
+────────┴▀▀▀▀▀────────┴────────
+      (0,0)
+
+top view:
+                    (1,1)
+        ┌─────────────┐
+        │             │
+        │             │
+        │             │   y
+        │▄▄▄▄▄        │   │
+        │█████        │   └───x
+        └▀▀▀▀▀────────┘
+      (0,0)
+"""
+
+from sph import models
+from sph import scenarios, post_processing
 import numpy as np
 
 # --- Initialize Fluid Block model ---

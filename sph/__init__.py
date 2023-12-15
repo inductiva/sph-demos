@@ -1,4 +1,4 @@
-#pylint: disable=unused-argument
+#pylint: disable=missing-module-docstring
 import logging
 
 logger = logging.getLogger()
