@@ -3,6 +3,7 @@ import os
 import tempfile
 from typing import List, Optional
 
+from absl import logging
 import pyvista as pv
 import moviepy.video.io.ImageSequenceClip as moviepy_io
 
@@ -85,3 +86,30 @@ def create_movie_from_vtk(vtk_output_dir: str,
         frames = sorted(frames)
         clip = moviepy_io.ImageSequenceClip(frames, fps=fps)
         clip.write_videofile(movie_path)
+
+
+def render(source_dir,
+           virtual_display: bool = False,
+           movie_path: str = "movie.mp4",
+           fps: int = 10,
+           color: str = "blue"):
+    """Render the simulation as a movie.
+
+    Args:
+    fps: Number of frames per second to use in the movie. Renders a
+        subset of the vtk files to create the movie.
+        Default: 10.
+    color: The color of the markers in the simulation.
+        If None, the default color is used.
+    """
+
+    vtk_dir = os.path.join(source_dir, "vtk")
+    movie_path = os.path.join(source_dir, movie_path)
+
+    logging.info("Rendering movie to %s with %d fps.", movie_path, fps)
+    create_movie_from_vtk(vtk_dir,
+                          movie_path,
+                          virtual_display=virtual_display,
+                          camera=[(3., 3., 2.), (0., 0., 0.), (1., 1., 2.)],
+                          fps=fps,
+                          color=color)
