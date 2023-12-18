@@ -7,15 +7,13 @@ import inductiva
 
 from .models import FluidBlock
 
-TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
+TEMPLATE_DIR = "templates"
 
 
 @dataclass
 class SimulationParameters:
     """Simulation-specific configuration parameters"""
-    adaptive_time_step: bool = True
     output_export_rate: float = 60
-    particle_sorting: bool = True
     particle_radius: float = 0.02
     simulation_time: float = 1
     time_step: float = 0.001
@@ -51,14 +49,16 @@ class FluidBlockSplishSplash(inductiva.mixins.FileManager):
         block_params["position"] += fluid_margin
         block_params["dimension"] -= 2 * fluid_margin
 
-        self.add_dir(self.SCENARIO_TEMPLATE_DIR, **self.fluid_block.to_dict(),
+        self.add_dir(self.SCENARIO_TEMPLATE_DIR, **block_params,
                      **sim_params.to_dict())
 
-        return inductiva.simulators.SplishSplash().run(
+        task = inductiva.simulators.SplishSplash().run(
             input_dir=self.get_root_dir(),
             sim_config_filename="fluid_block.json",
             machine_group=machine_group,
             storage_dir=self.SCENARIO_DIR)
+
+        return task
 
 
 class FluidBlockDualSPHysics(inductiva.mixins.FileManager):
