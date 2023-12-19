@@ -13,8 +13,8 @@ First, don't forget to `pip install inductiva` and then you can follow the [inst
 
 The **Inductiva API** guide for SPH simulations is the following:
 - [Running a simulation](SPH_SIMULATIONS.md#running-a-simulation);
-- [Create a custom simulation scenario](scenario/README.md);
-- [Generate a synthetic dataset at scale](scenario/DATASET.md).
+- [Create a custom simulation scenario](FLUID_BLOCK.md);
+- [Generate a synthetic dataset at scale](DATASET.md).
 
 In this tour, you will learn how to integrate **Inductiva API**  SPH simulation workflows through several examples.
 

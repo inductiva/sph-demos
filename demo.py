@@ -27,9 +27,8 @@ top view:
         └▀▀▀▀▀────────┘
       (0,0)
 """
-
-from sph import models
-from sph import scenarios, post_processing
+from lib import models
+from lib import scenarios, post_processing
 import numpy as np
 
 # --- Initialize Fluid Block model ---
@@ -42,6 +41,7 @@ dam_block = models.FluidBlock(models.WATER.density,
 
 sim_parameters = scenarios.SimulationParameters()
 sim_parameters.particle_radius = models.ParticleResolution.MEDIUM.value
+sim_parameters.simulation_time = 3
 
 # --- Run Fluid block scenario with SplishSplash ---
 print("Fluid block scenario with SplishSplash")
@@ -51,7 +51,7 @@ task = scenario.simulate(sim_parameters)
 
 task.wait()
 output_dir = task.download_outputs(output_dir="splishsplash_output")
-post_processing.render(output_dir)
+post_processing.render(output_dir, fps=60)
 
 # --- Fluid block scenario with DualSPHysics ---
 print("Fluid block scenario with DualSPHysics")
@@ -59,5 +59,5 @@ scenario = scenarios.FluidBlockDualSPHysics(dam_block)
 task = scenario.simulate(sim_parameters)
 
 task.wait()
-output_dir = task.download_outputs()
+output_dir = task.download_outputs(output_dir="dualsphysics_output")
 post_processing.render(output_dir)

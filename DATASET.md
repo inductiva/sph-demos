@@ -39,6 +39,13 @@ dataset_machines.start()
 Now, we are ready to generate the dataset with a simple `for` loop. 
 
 ```python
+
+dataset_tasks = []
+
+# Create the simulation parameters
+simulation_parameters = scenarios.SimulationParameters(
+simulation_time=SIMULATION_TIME, particle_radius=PARTICLE_RADIUS)
+
 for n in range(N_SIMULATIONS):
 
     # Randomly select the parameters
@@ -52,18 +59,47 @@ for n in range(N_SIMULATIONS):
     dimensions = np.random.uniform(low=0.05, high=wall_distance, size=(3,))
     velocity = np.random.uniform(low=-1., high=1., size=(3,))
     viscosity = 10**np.random.uniform(low=-6., high=1.)  
+    
+    # Initialize the Block parameters
+    block = models.FluidBlock(DENSITY, viscosity, dimensions, position,
+                              velocity)
 
     # Create the scenario
-    scenario = fluid_block.FluidBlock(density=DENSITY,
-                                      kinematic_viscosity=viscosity,
-                                      dimensions=dimensions,
-                                      position=position,
-                                      initial_velocity=velocity)
-
-    task = scenario.simulate(simulation_time=SIMULATION_TIME,
-                             particle_radius=PARTICLE_RADIUS,
+    scenario = scenarios.FluidBlockSplishSplash(block)
+    task = scenario.simulate(sim_params=simulation_parameters,
                              machine_group=dataset_machines)
+    dataset_tasks.append(task)
+
 ```
 
-All simulations are submitted! 
+All simulations are submitted with random block properties! 
 
+
+### Manage your tasks
+
+With all simulations submitted to your pool of machines, we can now monitor
+their progress. The `dataset_tasks` list contains all tasks submitted to the machines. With each task, we can check the status and wait for the simulation to finish before downloading the results.
+
+```python
+for index, task in enumerate(dataset_tasks):
+    # Wait for the task to finish
+    task.wait()
+    sim_name = "sim_" + str(index).zfill(4)
+    output_directory = os.path.join("dataset", sim_name)
+
+    if task.get_status() == "success":
+        output_dir = task.download_outputs(output_dir=output_directory)
+    else:
+        print(f"Simulation {index} failed with {task.get_status()}.")
+```
+
+As each simulation finishes with success, we download the results to the dataset
+directory on your local computer.
+
+That is all: we have just generated a dataset of 100 simulations with different
+parameters and with the simulations distributed over 10 machines!
+Don't forget to terminate your machines, to avoid surprises:
+
+```python
+dataset_machines.terminate()
+```
