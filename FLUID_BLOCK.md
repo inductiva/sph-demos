@@ -1,23 +1,12 @@
-# Build custom simulation scenarios with Inductiva API
+# Fluid Block simulation scenario
 
-**Inductiva API** provides a framework for users to create personalized simulation scenarios. These scenarios describe a physical model of a process in nature, that can be simulated. The configuration of the simulator is complex and takes a lot of work. 
-
-The goal is to abstract this complexity and explore the physical model by changing only a few parameters. All of the other ones are fixed and stored within the scenario.
-
-**Developers** can create personalized simulation scenarios with the following fundamental blocks:
-- Choose a simulator among the available ones in the Inductiva API;
-- Template the input files for the simulators;
-- Construct a Python class or method based on Inductiva API to manage your workflow.
+In this repository, we present an approach for creating a simulation scenario for the motion of fluid in a cubic tank using SPH: the `FluidBlock` scenario.
 
 **Drop the block:**
 
 <div style="display: flex; justify-content: center;">
     <img src="/assets/fluid_block.gif" width=500 alt="Fluid Block Movie">
 </div>
-
-## Fluid Block simulation scenario
-
-In this repository, we present an approach for creating a simulation scenario for the motion of fluid in a cubic tank using SPH: the `FluidBlock` scenario.
 
 The `FluidBlock` is characterized by a block of fluid with certain physical properties to be let free under the effect of gravity. For simplicity, we assume this block will be inside a cubic tank. We will allow users to configure the physical properties of the block, namely density and kinematic viscosity, and the dimensions and position of the tank. The initial velocity of the block will also be configurable.
 Moreover, the simulator can also be configured with only a few parameters, such as the simulation time, the particle radius, the time step and the output export rate.

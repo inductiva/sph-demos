@@ -1,15 +1,39 @@
 ### Install
 
-After having installed `inductiva` package with pip, the next step is to clone this repository:
+#### `inductiva` client
+
+The `inductiva` package is required to run the examples in this repository.
+
+It provides the user with mechanisms to run simulations at scale, without
+having to be worried about installing simulation packages and managing
+physical resources. Users need only to handle the science behind the problem
+and configure the simulation using the packages they know and love.
+
+**You handle the science, Inductiva manages the rest.**
+
+The `inductiva` package is easily installed using `pip`:
 
 ```bash
-git clone https://github.com/inductiva/inductiva-sph-demos.git
+$ pip install inductiva
 ```
-
-Then, for analysis of the results we suggest the installation of a few extra dependencies from within the `inductiva-sph-demos`:
+A successful installation can be tested using:
 ```bash
-pip install -r requirements.txt
+$ python -c 'import inductiva; print(inductiva.__version__)'
+<some version number printed here> 
 ```
+#### Demo repository
 
-To run visualizations you may be required to install `ffmpeg`, if it is not already installed in your setup. You can download it from
-[here](https://ffmpeg.org/download.html), or if using Anaconda to manage the environment install it directly with `conda install -c conda-forge ffmpeg`.
+Having the `inductiva` client available, the next step is to clone this repository:
+
+```bash
+$ git clone https://github.com/inductiva/inductiva-sph-demos.git
+```
+Then, for analysis of the results, we suggest the installation of a few extra dependencies specific to the demos:
+
+```bash
+$ cd inductiva-sph-demos
+$ pip install -r requirements.txt
+```
+Some of the final visualizations require `ffmpeg`, an external dependency that needs
+to be downloaded separately from [ffmpeg.org](https://ffmpeg.org/download.html) or
+through Anaconda/Miniconda with `conda install -c conda-forge ffmpeg`.
