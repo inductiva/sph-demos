@@ -3,7 +3,7 @@ from dataclasses import dataclass, asdict
 from typing import Optional
 import os
 
-import inductiva
+from inductiva import mixins, resources, simulators
 
 from .models import FluidBlock
 
@@ -23,7 +23,7 @@ class SimulationParameters:
         return asdict(self)
 
 
-class FluidBlockSplishSplash(inductiva.mixins.FileManager):
+class FluidBlockSplishSplash(mixins.FileManager):
     """FluidBlock scenario with SplishSplash simulator."""
 
     SCENARIO_DIR = "fluid_block_splishsplash"
@@ -37,11 +37,9 @@ class FluidBlockSplishSplash(inductiva.mixins.FileManager):
         """
         self.fluid_block = fluid_block
 
-    def simulate(
-        self,
-        sim_params: SimulationParameters,
-        machine_group: Optional[inductiva.resources.MachineGroup] = None
-    ) -> inductiva.tasks.Task:
+    def simulate(self,
+                 sim_params: SimulationParameters,
+                 machine_group: Optional[resources.MachineGroup] = None):
 
         self.set_root_dir(self.SCENARIO_DIR)
         fluid_margin = 2 * sim_params.particle_radius
@@ -52,7 +50,7 @@ class FluidBlockSplishSplash(inductiva.mixins.FileManager):
         self.add_dir(self.SCENARIO_TEMPLATE_DIR, **block_params,
                      **sim_params.to_dict())
 
-        task = inductiva.simulators.SplishSplash().run(
+        task = simulators.SplishSplash().run(
             input_dir=self.get_root_dir(),
             sim_config_filename="fluid_block.json",
             machine_group=machine_group,
@@ -61,7 +59,7 @@ class FluidBlockSplishSplash(inductiva.mixins.FileManager):
         return task
 
 
-class FluidBlockDualSPHysics(inductiva.mixins.FileManager):
+class FluidBlockDualSPHysics(mixins.FileManager):
     """FluidBlock scenario with DualSPHysics simulator."""
 
     SCENARIO_DIR = "fluid_block_dualsphysics"
@@ -91,11 +89,9 @@ class FluidBlockDualSPHysics(inductiva.mixins.FileManager):
 
         return commands
 
-    def simulate(
-        self,
-        sim_params: SimulationParameters,
-        machine_group: Optional[inductiva.resources.MachineGroup] = None
-    ) -> inductiva.tasks.Task:
+    def simulate(self,
+                 sim_params: SimulationParameters,
+                 machine_group: Optional[resources.MachineGroup] = None):
         self.set_root_dir(self.SCENARIO_DIR)
 
         parameters = sim_params.to_dict()
@@ -105,7 +101,7 @@ class FluidBlockDualSPHysics(inductiva.mixins.FileManager):
             os.path.join(self.SCENARIO_TEMPLATE_DIR, "fluid_block.xml.jinja"),
             "fluid_block.xml", **parameters, **self.fluid_block.to_dict())
 
-        return inductiva.simulators.DualSPHysics().run(
+        return simulators.DualSPHysics().run(
             input_dir=self.get_root_dir(),
             machine_group=machine_group,
             commands=self.get_commands(),
