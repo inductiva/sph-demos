@@ -1,32 +1,91 @@
-# Fluid Block simulation scenario
+# Fluid Block simulation
 
-In this repository, we present an approach for creating a simulation scenario for
-the motion of fluid in a cubic tank using SPH: the `FluidBlock` scenario.
+Consider the following SPH simulation: a **fluid block** with certain physical properties
+is set free under the effect of gravity.
 
 **Drop the block:**
 
-<div style="display: flex; justify-content: center;">
+<div align="center">
     <img src="/assets/fluid_block.gif" width=500 alt="Fluid Block Movie">
 </div>
 
+
+For this simulation, we need to configure the input files with the specific properties
+of the block. Imagine now that we want to change these properties, or even better, 
+we want to generate a dataset with different properties. How would we do it?
+
+One could manually change the input files and simulate for each set of parameters.
+However, this is a tedious and error-prone task. Moreover, it is not scalable.
+
+**Inductiva API** provides a simple interface to iterate over several arrangements
+of parameters and run the simulations at scale. This is done by creating a **simulation scenario**.
+
+Let's see how to run the above simulation with a **simulation scenario** with a
+`FluidBlockSplishSplash` scenario. 
+
+```python
+import numpy as np
+from lib import models
+from lib import scenarios
+
+# Configure a water block
+fluid_block = models.FluidBlock(position=np.array([0., 0., 0.3]))
+
+# Initialize the scenario
+scenario = scenarios.FluidBlockSlishSplash(fluid_block)
+
+# Configure the simulation parameters
+sim_params = scenarios.SimulationParameters()
+
+# Run the simulation
+task = scenario.simulate(sim_params)
+```
+
+It is that simple! Want to change any of the parameters or generate a dataset,
+Python is all you need! 
+
+```python
+num_samples = 100
+tasks_list = []
+
+for k in range(num_samples):
+    sample_position = np.random.uniform(low=[0., 0., 0.],
+                                        high=[0.5, 0.5, 0.5],
+                                        size=(3,))
+
+    # Configure a water block
+    fluid_block = models.FluidBlock(position=position)
+    scenario = scenarios.FluidBlockScenario(fluid_block)
+    sim_params = scenarios.SimulationParameters()
+
+    # Run the simulation
+    task = scenario.simulate(sim_params)
+    tasks_list.append(task)
+```
+
+Multiple simulations will be launched and you can track and download the results when
+they finish, all with **Inductiva API**.
+
+If your interest was piqued, let's see how to create a simulation scenario!
+
+## Create the Fluid Block scenario
+
 The `FluidBlock` is characterized by a block of fluid with certain physical properties
-to be let free under the effect of gravity. For simplicity, we assume this block will be
-inside a cubic tank. We will allow users to configure the physical properties of the block,
-namely density and kinematic viscosity, and the dimensions and position of the tank. The initial
-velocity of the block will also be configurable.
-Moreover, the simulator can also be configured with only a few parameters, such as the
-simulation time, the particle radius, the time step and the output export rate.
+to be let free under the effect of gravity. The scenario allows users to configure the physical
+properties of the block, namely density and kinematic viscosity, and the dimensions and position
+of the tank. The initial velocity of the block is also configurable. Moreover, the simulator is
+configured with only a few parameters, such as the simulation time, the particle radius,
+the time step and the output export rate.
 
-This scenario is meant to **inspire** the creation of your simulation workflows. Together,
-with the scenarios we also show how the outputs can be handled by post-processing methods
-and visualize the results.
+This scenario is meant to **inspire** the creation of your simulation workflows.
 
-## Building your simulation scenario
+#### Pick your simulator
 
 The first step is simple, **pick your simulator** of choice. For this example, we will
 use the [SplishSplash simulator](SPH_SIMULATIONS.md#splishsplash) via Inductiva API.
 
-Let's prepare the template files and directory.
+The mechanism that allows the creation a simulation scenario is the **templating** of the
+simulation input files.
 
 #### Template the input files
 
@@ -34,9 +93,7 @@ Templating is the act of substituting some variables in your input files with ta
 identify the parameters you want to change. With **Inductiva API** you can substitute
 these parameters on the fly when selecting different values.
 
-
-
-###### Example of template file
+##### Example of template file
 
 To template a file one needs to substitute the variables with `{{ parameter_name }}`.
 For example, the `fluid_block.json` file can be templated as:
@@ -51,8 +108,6 @@ For example, the `fluid_block.json` file can be templated as:
     <img src="/assets/template_file_example.png" alt="Template Example">
 </div>
 </div>
-
-With the parameters templated, we can now create the `FluidBlock` scenario.
 
 These templated files are set in a single directory. For this scenario, we have the
 following template directory:
@@ -70,14 +125,16 @@ simulation: `fluid_block.json.jinja` and `unit_box.obj`.
 We remark that templated files need to contain the suffix `.jinja`. Otherwise they won't be
 modified. Other extra files can be added as you wish to the template directory.
 
+With the parameters templated, we can now create the `FluidBlock` scenario.
 
-#### Create the simulation scenario class
 
-With the above setup, we are now ready to create the Python interface for the `FluidBlock`
-scenario via **Inductiva API**.
+#### `FluidBlock` class
+
+The `FluidBlock` class configures the template files as you wish and runs the
+simulation via **Inductiva API**.
 
 We break this scenario into three classes: `FluidBlock`, `SimulationParameters` and
-`FluidBlockSplishSplash`. The first two classes will define the parameters that are
+`FluidBlockSplishSplash`. The first two classes define the parameters that are
 set with the same name in the template files.
 
 ##### Input Parameters
@@ -176,14 +233,12 @@ Let's go through the `simulate` method for our current scenario.
 ###### `simulate()` break down
 
 The `simulate` method encapsulates several steps to simplify the workflow!
-First, we set the root directory for the file manager - the `add_file` and `add_dir`
-methods will use it as their base directory.
-
-Next, we further configure the render parameters. For some simulation scenarios, 
-the parameters in the template files aren't exactly what is passed via the arguments
-of the scenario. Here, the position and dimensions of the block are translated
-according to the particle radius, so that the block is inside the container. Once
-more, the goal is to free the user from all nuances of setting up the simulator. 
+We set the root directory for the file manager - the `add_file` and `add_dir`
+methods use it as their base directory. Next, we configure the render parameters further.
+In some simulation scenarios, the parameters we expose to the user aren't the
+ones in the template files. Here, for example, we translate the block so that it is
+inside the container.
+The goal is to free the user from all nuances of setting up the simulator. 
 
 With all the parameters prepared, the input directory of the simulation is created
 in the `root_dir`. We directly render the template directory with the `FluidBlock` 
@@ -194,9 +249,12 @@ use the **Inductiva API** to run the abstracted simulator with the prepared
 configurations. In this case, we use the `SplishSplash` simulator and run it
 with the `fluid_block.json` file as input.
 
-The workflow is already implemented (with a few tweaks) within the `models.py` -
-which contains the `FluidBlock` - 
-and the `scenarios.py` - with the `SimulationParameters` and `FluidBlockSplishSplash`.
+#### Explore other variations
+
+The workflow is already implemented (with a few tweaks) within the `models.py` file -
+which contains the `FluidBlock` -  and the `scenarios.py` file - with the `SimulationParameters`
+and `FluidBlockSplishSplash`.
+
 Go over them now by yourself and soon you will be a power developer of your simulation
 scenarios! You also learn how to integrate other SPH simulators with the same parameters.
 
@@ -247,7 +305,7 @@ When running this script you will obtain the following logs in the terminal:
 <img src="/assets/simulation_logs.png" alt="Simulation Logs">
 </div>
 
-At the end, a video like the following will be ready in the output folder:
+At the end, a video will be ready in the output folder:
 
 <div style="display: flex; justify-content: center;">
     <img src="/assets/fluid_block_2.gif" width=500 alt="Fluid Block Movie">

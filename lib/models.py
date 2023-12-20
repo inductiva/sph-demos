@@ -20,9 +20,9 @@ class FluidBlock:
         velocity: The initial velocity of the fluid block
             (in x, y, z), in m/s.
     """
-    density: float
-    kinematic_viscosity: float
-    dimension: np.array
+    density: float = 1000
+    kinematic_viscosity: float = 1e-6
+    dimension: np.array = np.array([0.3, 0.3, 0.3])
     position: np.array = np.zeros(3)
     velocity: np.array = np.zeros(3)
 
