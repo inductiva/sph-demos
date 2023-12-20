@@ -4,12 +4,12 @@
 <img src="/assets/duck.gif" width=500 height=300 alt="Duck simulation">
 </div>
 
-With [**Inductiva API**](https://github.com/inductiva/inductiva/tree/main), exploring
-Smoothed Particle Hydrodynamics (SPH) simulations was never easier. 
+With [**Inductiva API**](https://github.com/inductiva/inductiva/tree/main), exploring Smoothed
+Particle Hydrodynamics (SPH) simulations was never easier. 
 
 Users can launch the simulations they are familiar with through a simple Python interface,
 without having to worry about downloading/compiling and installing simulation packages and
-managing computational resources.
+managing/maintaining computational resources.
 
 Two open-source SPH simulators are available via **Inductiva API** -
 [SplishSplash](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH) and
