@@ -1,6 +1,7 @@
 # Fluid Block simulation scenario
 
-In this repository, we present an approach for creating a simulation scenario for the motion of fluid in a cubic tank using SPH: the `FluidBlock` scenario.
+In this repository, we present an approach for creating a simulation scenario for
+the motion of fluid in a cubic tank using SPH: the `FluidBlock` scenario.
 
 **Drop the block:**
 
@@ -8,26 +9,38 @@ In this repository, we present an approach for creating a simulation scenario fo
     <img src="/assets/fluid_block.gif" width=500 alt="Fluid Block Movie">
 </div>
 
-The `FluidBlock` is characterized by a block of fluid with certain physical properties to be let free under the effect of gravity. For simplicity, we assume this block will be inside a cubic tank. We will allow users to configure the physical properties of the block, namely density and kinematic viscosity, and the dimensions and position of the tank. The initial velocity of the block will also be configurable.
-Moreover, the simulator can also be configured with only a few parameters, such as the simulation time, the particle radius, the time step and the output export rate.
+The `FluidBlock` is characterized by a block of fluid with certain physical properties
+to be let free under the effect of gravity. For simplicity, we assume this block will be
+inside a cubic tank. We will allow users to configure the physical properties of the block,
+namely density and kinematic viscosity, and the dimensions and position of the tank. The initial
+velocity of the block will also be configurable.
+Moreover, the simulator can also be configured with only a few parameters, such as the
+simulation time, the particle radius, the time step and the output export rate.
 
-This scenario is meant to **inspire** the creation of your simulation workflows. Together, with the scenarios we also show how the outputs can be handled by post-processing methods and visualize the results.
+This scenario is meant to **inspire** the creation of your simulation workflows. Together,
+with the scenarios we also show how the outputs can be handled by post-processing methods
+and visualize the results.
 
 ## Building your simulation scenario
 
-The first step is simple, **pick your simulator** of choice. For this example, we will use the [SplishSplash simulator](SPH_SIMULATIONS.md#splishsplash) via Inductiva API.
+The first step is simple, **pick your simulator** of choice. For this example, we will
+use the [SplishSplash simulator](SPH_SIMULATIONS.md#splishsplash) via Inductiva API.
 
 Let's prepare the template files and directory.
 
 #### Template the input files
 
-Templating is the act of substituting some variables in your input files with tags that identify the parameters you want to change. With **Inductiva API** you can substitute these parameters on the fly when selecting different values.
+Templating is the act of substituting some variables in your input files with tags that
+identify the parameters you want to change. With **Inductiva API** you can substitute
+these parameters on the fly when selecting different values.
 
 
 
 ###### Example of template file
 
-To template a file one needs to substitute the variables with `{{ parameter_name }}`. For example, the `fluid_block.json` file can be templated as:
+To template a file one needs to substitute the variables with `{{ parameter_name }}`.
+For example, the `fluid_block.json` file can be templated as:
+
 <div style="display: flex; justify-content: space-between;">
 <div>
     <h7>Input File</h7>
@@ -41,7 +54,8 @@ To template a file one needs to substitute the variables with `{{ parameter_name
 
 With the parameters templated, we can now create the `FluidBlock` scenario.
 
-These templated files are set in a single directory. For this scenario, we have the following template directory:
+These templated files are set in a single directory. For this scenario, we have the
+following template directory:
 
 ```
    templates/splishsplash
@@ -50,16 +64,21 @@ These templated files are set in a single directory. For this scenario, we have 
     |- unit_box.obj
 ```
 
-In this directory, we set all of the files (templated or not) required to run the simulation: `fluid_block.json.jinja` and `unit_box.obj`.
+In this directory, we set all of the files (templated or not) required to run the
+simulation: `fluid_block.json.jinja` and `unit_box.obj`.
 
-We remark that templated files need to contain the suffix `.jinja`. Otherwise they won't be modified. Other extra files can be added as you wish to the template directory.
+We remark that templated files need to contain the suffix `.jinja`. Otherwise they won't be
+modified. Other extra files can be added as you wish to the template directory.
 
 
 #### Create the simulation scenario class
 
-With the above setup, we are now ready to create the Python interface for the `FluidBlock` scenario via **Inductiva API**.
+With the above setup, we are now ready to create the Python interface for the `FluidBlock`
+scenario via **Inductiva API**.
 
-We break this scenario into three classes: `FluidBlock`, `SimulationParameters` and `FluidBlockSplishSplash`. The first two classes will define the parameters that will be set in the template files, with the same exact name.
+We break this scenario into three classes: `FluidBlock`, `SimulationParameters` and
+`FluidBlockSplishSplash`. The first two classes will define the parameters that are
+set with the same name in the template files.
 
 ##### Input Parameters
 
@@ -92,13 +111,16 @@ class SimulationParameters:
         return asdict(self)
 ```
 
-The `to_dict` method converts the parameters of the class into a dictionary that will be used as input in the templating method. 
+The `to_dict` method converts the parameters of the class into a dictionary that
+will be used as input in the templating method. 
 
-The `FluidBlockSplishSplash` class contains the simulation workflow, which uses the `inductiva.mixin.FileManager` class to manage and template the input files.
+The `FluidBlockSplishSplash` class contains the simulation workflow, which uses the
+`inductiva.mixin.FileManager` class to manage and template the input files.
 
 ##### Simulation Workflow
 
-Let's go over it step by step! The first block is the initialization of the class. For this scenario we initialize with a `FluidBlock` object, as follows:
+Let's go over it step by step! The first block is the initialization of the class. For this
+scenario we initialize with a `FluidBlock` object, as follows:
 
 ```python
 class FluidBlockSplishSplash(inductiva.mixins.FileManager):
@@ -107,12 +129,15 @@ class FluidBlockSplishSplash(inductiva.mixins.FileManager):
         self.fluid_block = fluid_block
 ```
 
-Now, the magic is set in the `simulate` method, where the user can use the templating tools present in the `inductiva.mixin.FileManager` class to:
+Now, the magic is set in the `simulate` method, where the user can use the templating tools
+present in the `inductiva.mixin.FileManager` class to:
 - Set up the root directory for the simulation;
 - Add general files or directories;
 - Render them on the spot with the parameters provided by the user.
 
-The two last points are both done with `add_file` and `add_dir` methods. In case the `render_args` (`dict`) are passed the template occurs on the spot. Otherwise, the file or directory is copied as is.
+The two last points are both done with `add_file` and `add_dir` methods. In case the `render_args`
+(`dict`) are passed the template occurs on the spot. Otherwise, the file or directory is
+copied as is.
 
 Let's go through the `simulate` method for our current scenario.
 
@@ -169,8 +194,8 @@ use the **Inductiva API** to run the abstracted simulator with the prepared
 configurations. In this case, we use the `SplishSplash` simulator and run it
 with the `fluid_block.json` file as input.
 
-The workflow is already implemented (with a few tweaks) within the `models.py` - 
-contains the `FluidBlock` - 
+The workflow is already implemented (with a few tweaks) within the `models.py` -
+which contains the `FluidBlock` - 
 and the `scenarios.py` - with the `SimulationParameters` and `FluidBlockSplishSplash`.
 Go over them now by yourself and soon you will be a power developer of your simulation
 scenarios! You also learn how to integrate other SPH simulators with the same parameters.

@@ -1,12 +1,22 @@
 ## Generate a Dataset via Inductiva API
 
-Whether you want to explore a design space or generate a dataset for machine learning, **Inductiva API** has you covered. Now, that you know how to run a SPH simulation and build a scenario, all that is required is to select the range of parameters you want to explore and add a `for` loop to your workflow.
+Whether you want to explore a design space or generate a dataset for machine learning,
+**Inductiva API** has you covered. Now, that you know how to run an SPH simulation and build
+a scenario, all that is required is to select the range of parameters you want to explore
+and add a `for` loop to your workflow.
 
-Of course, running one simulation at a time would be a pain. So, **Inductiva API** also covers that. Let's see how to generate a dataset of 100 simulations with different parameters and with the simulations distributed over 10 machines!
+Of course, running one simulation at a time would be a pain. **Inductiva API** simplifies it and
+you can generate a dataset with the simulations distributed over multiple machines.
 
-If you are a solo adventurer, you can get started with the script `generate_dataset.py` in the `scenario` folder. Otherwise, let's go step by step. Our starting point is the `FluidBlock` scenario we have created previously, to make this exploration.
+Let's see an example for 100 simulations with different parameters and with
+the simulations distributed over 10 machines!
 
-In this dataset, we want to vary the position, dimensions and velocity of the fluid block, as well as the viscosity of the fluid. The other variables will be kept constant.
+If you are a solo adventurer, you can get started with the script `generate_dataset.py`
+in the `scenario` folder. Otherwise, let's go step by step. Our starting point is the `FluidBlock`
+scenario we have created previously, to make this exploration.
+
+In this dataset, we want to vary the position, dimensions and velocity of the fluid block,
+as well as the viscosity of the fluid. The other variables will be kept constant.
 
 ```python
 import inductiva
@@ -22,11 +32,13 @@ N_SIMULATIONS = 100
 
 We assume the following ranges for the parameters we want to vary:
 - position: each coordinate varies over $[0., 0.5]$;
-- dimensions: this depends on the position and each coordinate varies over $[0.05, `distance_to_wall`]$;
+- dimensions: this depends on the position and varies in the range $[0.05, `distance_to_wall`]$;
 - velocity: each coordinate varies over $[-1., 1.]$;
 - viscosity: varies over $[1e-6, 1e1]$.
 
-Randomly varying over these parameters and submitting the simulations will be troublesome, therefore we will launch now the 10 machines that we use to generate the dataset. We will use the `inductiva` package to launch the machines.
+Randomly varying over these parameters and submitting the simulations will be troublesome,
+therefore we will launch now the 10 machines that we use to generate the dataset.
+We will use the `inductiva` package to launch the machines.
 
 ```python
 dataset_machines = inductiva.resources.MachineGroup(machine_type="c2-standard-4",
@@ -78,7 +90,9 @@ All simulations are submitted with random block properties!
 ### Manage your tasks
 
 With all simulations submitted to your pool of machines, we can now monitor
-their progress. The `dataset_tasks` list contains all tasks submitted to the machines. With each task, we can check the status and wait for the simulation to finish before downloading the results.
+their progress. The `dataset_tasks` list contains all tasks submitted to the machines.
+With each task, we can check the status and wait for the simulation to finish before
+downloading the results.
 
 ```python
 for index, task in enumerate(dataset_tasks):
