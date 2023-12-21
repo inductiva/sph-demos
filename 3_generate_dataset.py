@@ -16,11 +16,11 @@ import inductiva
 from lib import models
 from lib import scenarios
 
-# Constant parameters for all simulations
-DENSITY = 1e3  # in kg/m^3
+# Constant parameters for all simulations in this dataset
+DENSITY = 1e3                   # in kg/m^3
 TANK_DIMENSIONS = [1., 1., 1.]  # in meters
-SIMULATION_TIME = 3.  # in seconds
-PARTICLE_RADIUS = 0.008  # in meters
+SIMULATION_TIME = 3.            # in seconds
+PARTICLE_RADIUS = 0.008         # in meters
 OUTPUT_DIR = "dataset"
 N_SIMULATIONS = 10
 

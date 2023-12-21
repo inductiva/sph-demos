@@ -2,8 +2,8 @@
 
 The examples in this section extend upon the straightforward API calls from the
 [previous section](SPH_SIMULATIONS.md) and show how the user can abstract the
-scientific problem into scenarios that use the API's robust templating mechanism to
-dynamically generate input files for their simulations.
+scientific problem into scenarios that use the API's robust templating mechanism
+to dynamically generate input files for their simulations.
 
 ## Dropping the block
 

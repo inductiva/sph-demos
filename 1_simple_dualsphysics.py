@@ -11,6 +11,7 @@ commands = [
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
+
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir="sph-example-dirs/simple-dualsphysics",
                         commands=commands)
