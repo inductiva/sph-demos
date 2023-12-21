@@ -18,10 +18,9 @@ can use them directly or leverage the API to create custom scenarios and explore
 design spaces with simplicity.
 
 The **Inductiva API** tour for SPH simulations is the following:
-- [How to use this repository and install any dependencies](INSTALL.md);
-- [Run a simulation using straightforward API calls](SPH_SIMULATIONS.md#running-a-simulation);
-- [Leverage the API to create a custom simulation scenario](FLUID_BLOCK.md);
-- [Generate a synthetic dataset at scale](DATASET.md).
+- [How to use this repository and install any dependencies](docs/0_INSTALL.md);
+- [Run a simulation using straightforward API calls](docs/1_SPH_SIMULATIONS.md#running-a-simulation);
+- [Leverage the API to create a custom simulation scenario](docs/2_FLUID_BLOCK_SCENARIOS.md).
 
 To learn more about the `inductiva` package, check the
 [Inductiva API documentation](https://github.com/inductiva/inductiva/wiki) and
