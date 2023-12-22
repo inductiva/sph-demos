@@ -1,31 +1,27 @@
 # Smoothed Particle Hydrodynamics (SPH) via Inductiva API
 
-[**Inductiva API**](https://github.com/inductiva/inductiva/tree/main) empowers users to run large-scale simulations. With a simple interface, users have access to several simulators and features that help manage complex simulation workflows. 
+<div align="center">
+<img src="/assets/duck.gif" width=500 height=300 alt="Duck simulation">
+</div>
 
-Here, we explore Smoothed Particle Hydrodynamics (SPH) with two simulators available via **Inductiva API** - [SplishSplash](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH) and [DualSPHysics](https://github.com/inductiva/inductiva/wiki/DualSPHysics). 
+With [**Inductiva API**](https://github.com/inductiva/inductiva/tree/main), exploring Smoothed
+Particle Hydrodynamics (SPH) simulations was never easier. 
 
-In this repository, we make a tour of **Inductiva API**:
-- [Create a scenario](scenario/README.md);
-- [Generate a dataset via scenario](dataset/README.md).
+Users can launch the simulations they are familiar with through a simple Python interface,
+without having to worry about downloading/compiling and installing simulation packages and
+managing/maintaining computational resources.
 
-### Install
+Two open-source SPH simulators are available via **Inductiva API** -
+[SplishSplash](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH) and
+[DualSPHysics](https://github.com/inductiva/inductiva/wiki/DualSPHysics). Users
+can use them directly or leverage the API to create custom scenarios and explore
+design spaces with simplicity.
 
-To start experimenting with these scenarios you need to clone the public GitHub repository
+The **Inductiva API** tour for SPH simulations is the following:
+- [How to use this repository and install any dependencies](docs/0_INSTALL.md);
+- [Run a simulation using straightforward API calls](docs/1_SPH_SIMULATIONS.md#running-a-simulation);
+- [Leverage the API to create a custom simulation scenario](docs/2_FLUID_BLOCK_SCENARIOS.md).
 
-```bash
-git clone https://github.com/inductiva/inductiva-sph-demos.git
-```
-
-and install the `inductiva` package and other extra dependencies that are useful for this scenario.
-
-Install `inductiva` package:
-```bash
-pip install inductiva
-```
-
-Install extra dependencies from within the `inductiva-sph-demos`:
-```bash
-pip install -r requirements.txt
-```
-
-To further learn about the `inductiva` package, check the [Inductiva API documentation](https://github.com/inductiva/inductiva/wiki).
+To learn more about the `inductiva` package, check the
+[Inductiva API documentation](https://github.com/inductiva/inductiva/wiki) and
+here to learn more about [SPH](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics).
