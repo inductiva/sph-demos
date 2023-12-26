@@ -83,7 +83,7 @@ Using a `FileManager` object, this file can be easily rendered and stored in a
 user-specified folder:
 
 ```python
-from inductive import mixins
+from inductiva import mixins
 
 manager = mixins.FileManager()
 
