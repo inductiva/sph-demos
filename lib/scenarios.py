@@ -74,7 +74,7 @@ class FluidBlockDualSPHysics(mixins.FileManager):
         self.fluid_block = fluid_block
 
     def get_commands(self):
-        commands = [{
+        commands = [
             "gencase fluid_block fluid_block -save:all",
             "dualsphysics fluid_block fluid_block -dirdataout data -svres",
             "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
