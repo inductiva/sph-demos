@@ -17,10 +17,10 @@ from lib import models
 from lib import scenarios
 
 # Constant parameters for all simulations in this dataset
-DENSITY = 1e3                   # in kg/m^3
+DENSITY = 1e3  # in kg/m^3
 TANK_DIMENSIONS = [1., 1., 1.]  # in meters
-SIMULATION_TIME = 3.            # in seconds
-PARTICLE_RADIUS = 0.008         # in meters
+SIMULATION_TIME = 3.  # in seconds
+PARTICLE_RADIUS = 0.008  # in meters
 OUTPUT_DIR = "dataset"
 N_SIMULATIONS = 10
 
@@ -36,13 +36,13 @@ simulation_parameters = scenarios.SimulationParameters(
 
 for i in range(N_SIMULATIONS):
 
-    position = np.random.uniform(low=0., high=0.5, size=(3,))
+    position = np.random.uniform(low=0., high=0.5, size=(3, ))
 
     # Compute vector of distance to the walls
     wall_distance = TANK_DIMENSIONS - position
 
-    dimensions = np.random.uniform(low=0.05, high=wall_distance, size=(3,))
-    velocity = np.random.uniform(low=-1., high=1., size=(3,))
+    dimensions = np.random.uniform(low=0.05, high=wall_distance, size=(3, ))
+    velocity = np.random.uniform(low=-1., high=1., size=(3, ))
     viscosity = 10**np.random.uniform(low=-6., high=1.)
 
     # Initialize Block parameters
@@ -52,7 +52,7 @@ for i in range(N_SIMULATIONS):
     print(f"\n========== LAUNCHING SIMULATION {i}/{N_SIMULATIONS} ==========")
     scenario = scenarios.FluidBlockSplishSplash(block)
     task = scenario.simulate(sim_params=simulation_parameters,
-                             machine_group=dataset_machines)
+                             on=dataset_machines)
 
     dataset_tasks.append(task)
 
