@@ -115,12 +115,10 @@ $ cat simple_dualsphysics.py
 import inductiva
 
 commands = [
-    {"cmd": "gencase flow_cylinder flow_cylinder -save:all", "prompts": []},
-    {"cmd": "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres",
-     "prompts":[]},
-    {"cmd": "partvtk -dirin flow_cylinder/data -savevtk vtk/PartFluid " \
-            "-onlytype:+fluid",
-     "prompts": []}]
+    "gencase flow_cylinder flow_cylinder -save:all",
+    "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres",
+    "partvtk -dirin flow_cylinder/data -savevtk vtk/PartFluid "-onlytype:+fluid"
+    ]
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
