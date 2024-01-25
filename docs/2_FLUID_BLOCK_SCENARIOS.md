@@ -137,7 +137,7 @@ class FluidBlockSplishSplash(mixins.FileManager):
 
     def simulate(self,
                  sim_params: SimulationParameters,
-                 machine_group: Optional[resources.MachineGroup] = None):
+                 on: Optional[resources.MachineGroup] = None):
 
         self.set_root_dir(self.SCENARIO_DIR)
         fluid_margin = 2 * sim_params.particle_radius
@@ -152,7 +152,7 @@ class FluidBlockSplishSplash(mixins.FileManager):
         task = simulators.SplishSplash().run(
             input_dir=self.get_root_dir(),
             sim_config_filename="fluid_block.json",
-            machine_group=machine_group,
+            on=machine_group,
             storage_dir=self.SCENARIO_DIR)
 
         return task
@@ -188,7 +188,7 @@ class SimulationParameters:
 
 The latter is an **Inductiva API** construct that allows the user to configure
 the computational resources used to run the simulations.
-By default (`machine_group = None`), the user does not need to configure this
+By default (`on = None`), the user does not need to configure this
 parameter and resources will be managed by default pool (see the
 [MachineGroup](https://github.com/inductiva/inductiva/wiki/Machines) documentation
 for details on how to configure and use machine groups).
@@ -255,22 +255,16 @@ class FluidBlockDualSPHysics(mixins.FileManager):
     ...
     def get_commands(self):
         commands = [
-            {
-                "cmd": "gencase fluid_block fluid_block -save:all",
-                "prompts": []},
-            {
-                "cmd": "dualsphysics fluid_block fluid_block -dirdataout data -svres",
-                "prompts": []},
-            {
-                "cmd": "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
-                "prompts": []
-            }]
+               "gencase fluid_block fluid_block -save:all",
+               "dualsphysics fluid_block fluid_block -dirdataout data -svres",
+               "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
+            ]
 
         return commands
 
     def simulate(self,
                  sim_params: SimulationParameters,
-                 machine_group: Optional[resources.MachineGroup] = None):
+                 on: Optional[resources.MachineGroup] = None):
         self.set_root_dir(self.SCENARIO_DIR)
 
         parameters = sim_params.to_dict()
@@ -283,7 +277,7 @@ class FluidBlockDualSPHysics(mixins.FileManager):
 
         return simulators.DualSPHysics().run(
             input_dir=self.get_root_dir(),
-            machine_group=machine_group,
+            on=machine_group,
             commands=self.get_commands(),
         )
 ```
@@ -344,7 +338,7 @@ for k in range(DATASET_SIZE):
 
     # spawn simulations
     scenario = scenarios.FluidBlockSplishSplash(fluid_block)
-    task = scenario.simulate(sim_params, machine_group=machines)
+    task = scenario.simulate(sim_params, on=machines)
     tasks.append(task)
 
 # wait for tasks to finish and download outputs to a local folder

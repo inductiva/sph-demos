@@ -39,7 +39,7 @@ class FluidBlockSplishSplash(mixins.FileManager):
 
     def simulate(self,
                  sim_params: SimulationParameters,
-                 machine_group: Optional[resources.MachineGroup] = None):
+                 on: Optional[resources.MachineGroup] = None):
 
         self.set_root_dir(self.SCENARIO_DIR)
         fluid_margin = 2 * sim_params.particle_radius
@@ -53,7 +53,7 @@ class FluidBlockSplishSplash(mixins.FileManager):
         task = simulators.SplishSplash().run(
             input_dir=self.get_root_dir(),
             sim_config_filename="fluid_block.json",
-            machine_group=machine_group,
+            on=on,
             storage_dir=self.SCENARIO_DIR)
 
         return task
@@ -74,24 +74,17 @@ class FluidBlockDualSPHysics(mixins.FileManager):
         self.fluid_block = fluid_block
 
     def get_commands(self):
-        commands = [{
-            "cmd": "gencase fluid_block fluid_block -save:all",
-            "prompts": []
-        }, {
-            "cmd":
-                "dualsphysics fluid_block fluid_block -dirdataout data -svres",
-            "prompts": []
-        }, {
-            "cmd":
-                "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
-            "prompts": []
-        }]
+        commands = [
+            "gencase fluid_block fluid_block -save:all",
+            "dualsphysics fluid_block fluid_block -dirdataout data -svres",
+            "partvtk -dirin fluid_block/data -savevtk vtk/PartFluid -onlytype:-all,+fluid",
+        ]
 
         return commands
 
     def simulate(self,
                  sim_params: SimulationParameters,
-                 machine_group: Optional[resources.MachineGroup] = None):
+                 on: Optional[resources.MachineGroup] = None):
         self.set_root_dir(self.SCENARIO_DIR)
 
         parameters = sim_params.to_dict()
@@ -103,6 +96,6 @@ class FluidBlockDualSPHysics(mixins.FileManager):
 
         return simulators.DualSPHysics().run(
             input_dir=self.get_root_dir(),
-            machine_group=machine_group,
+            on=on,
             commands=self.get_commands(),
         )
