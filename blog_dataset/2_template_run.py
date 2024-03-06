@@ -10,8 +10,8 @@ input_dir = "splishsplash-template-dir"
 
 # Set the honey properties at room temperature and the initial velocity
 honey_density = 2500 # kg/m^3
-honey_kinematic_viscosity = 0.0075 # m^2/s
-initial_velocity = [1, 0, 0] # m/s
+honey_kinematic_viscosity = 2 # m^2/s
+initial_velocity = [4, 0, 0] # m/s
 
 # Initialize the simulator and run the simulation
 splishsplash = inductiva.simulators.SplishSplash()

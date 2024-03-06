@@ -1,8 +1,8 @@
 {
     "Configuration": {
-        "stopAt": 5,
-        "timeStepSize": 0.01,
-        "particleRadius": 0.005,
+        "stopAt": 4,
+        "timeStepSize": 0.001,
+        "particleRadius": 0.008,
         "simulationMethod": 4,
         "boundaryHandlingMethod": 0,
         "kernel": 1,
@@ -11,10 +11,11 @@
         "cflMinTimeStepSize": 0.0001,
         "cflMaxTimeStepSize": 0.005,
         "gravitation": [0, 0, -9.81],
-        "gradKernel": 1,
+        "gradKernel": 1,	
         "enableVTKExport": true,
         "dataExportFPS": 60,
-        "particleAttributes": "velocity;density"
+        "particleAttributes": "velocity;density",
+        "enableZSort": true
     },
     "RigidBodies": [
         {
@@ -36,8 +37,8 @@
         {
             "id": "Fluid",
             "particleFile": "unit_box.obj",
-            "translation": [0, 0, 0],
-            "scale": [0.3, 1.0, 0.5],
+            "translation": [0.05, 0.05, 0.45],
+            "scale": [0.5, 0.5, 0.5],
             "initialVelocity": [0, 0, 0]
         }
     ]

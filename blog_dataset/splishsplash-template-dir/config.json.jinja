@@ -1,7 +1,7 @@
 {
     "Configuration": {
         "stopAt": 4.0,
-        "timeStepSize": 0.01,
+        "timeStepSize": 0.001,
         "particleRadius": 0.008,
         "simulationMethod": 4,
         "boundaryHandlingMethod": 0,
@@ -36,7 +36,7 @@
         {
             "id": "Fluid",
             "particleFile": "unit_box.obj",
-            "translation": {{ initial_position | default([0, 0, 0]) }},
+            "translation": {{ initial_position | default([0.05, 0.05, 0.45]) }},
             "scale": {{ dimensions | default([0.5, 0.5, 0.5]) }},
             "initialVelocity": {{ initial_velocity | default([0, 0, 0]) }}
         }
